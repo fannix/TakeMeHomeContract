@@ -20,7 +20,7 @@ its addresses is 6478509f833cccbbc5a9f70e6d8183065b54b48f.
 
 We also deployed an example of reward contract at 011ce07245481a06042f039407f6b7737e443e47.
 To test our app, We created an corresponding entry for this contract in the registry contract:
-70202E016B4FC400203AAE13CC40D7855A2A5EDF -> DD21460AC14E185BDA33BB36B6C37263E391BDA6
+`70202E016B4FC400203AAE13CC40D7855A2A5EDF -> DD21460AC14E185BDA33BB36B6C37263E391BDA6`.
 The key is `hash(beaconID`) with beaconID as 
 id1: 00000000-0000-0000-0000-000000000000 id2: 0 id3: 0.  
 And the value is `hash(beaconID + "0") XOR 011ce07245481a06042f039407f6b7737e443e47` (i.e. the reward contract address).
