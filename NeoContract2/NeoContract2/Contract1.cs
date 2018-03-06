@@ -5,11 +5,18 @@ using System;
 using System.ComponentModel;
 using System.Numerics;
 
+
+/**
+ * This is an example reward contract for the applicaton TakeMeHome
+ * 
+ * We created a webpage for the missing dog: doge, and made up one email for it.
+ */
+
 namespace Neo.SmartContract
 {
     public class Found : Framework.SmartContract
     {
-        //Token Settings
+        // The web URL
         public static string Url() => "https://fannix.github.io/doge.html";
         public static string Email() => "doge@doge.com";
         public static readonly byte[] Owner = "ASfFNunqtv73UDidxz5Z5fi5fYHAZb3NrQ".ToScriptHash();
@@ -34,10 +41,16 @@ namespace Neo.SmartContract
                     if (args.Length != 2) return false;
                     byte[] to = (byte[])args[0];
                     byte[] info = (byte[])args[1];
+
+                    // Get the current number of submission
                     BigInteger count = Storage.Get(Storage.CurrentContext, "count").AsBigInteger();
+                    // Save the newly submitted location into a new storage unit
                     Storage.Put(Storage.CurrentContext, count.AsByteArray(), info);
+                    //increase the counter
                     count = count + 1;
                     Storage.Put(Storage.CurrentContext, "count", count);
+
+                    // Someone submit a location, we reward him/her 1 token
                     return Transfer("reserve".AsByteArray(), to, 1);
                 }
                 if (operation == "balanceOf")
@@ -51,12 +64,14 @@ namespace Neo.SmartContract
             return false;
         }
 
-        // initialization parameters, only once
+        // initialize storage, only need to do it once
         public static bool Deploy()
         {
-            byte[] count = Storage.Get(Storage.CurrentContext, "count");
-            //if (count.Length != 0) return false;
+            // count is the number of location submission 
             Storage.Put(Storage.CurrentContext, "count", 0);
+            // We are playing with virtual money here. 
+            // Assume we have reserve 1000 unit of tokens or assets as reward
+            // TODO: We need to mint our application specific tokens in the future
             Storage.Put(Storage.CurrentContext, "reserve", 1000);
             return true;
         }

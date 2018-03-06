@@ -5,6 +5,11 @@ using Neo.SmartContract.Framework.Services.System;
 using System;
 using System.Numerics;
 
+/**
+ * This is the missing subject registry for the TakeMeHome application
+ *
+ */
+
 namespace NeoContract1
 {
     public class RegistryContract : SmartContract
@@ -30,6 +35,7 @@ namespace NeoContract1
             }
         }
 
+        // Create an entry using Beacon ID as key, and reward contract address as value
         private static object Create(byte[] key, byte[] value)
         {
             
@@ -37,13 +43,18 @@ namespace NeoContract1
             return true;
         }
 
+        // Get the smart contract address by using Beacon ID
         private static object Get(byte[] key)
         {
             return Storage.Get(Storage.CurrentContext, key);
         }
 
+        // Delete the entry by key
         private static object Delete(byte[] key)
         {
+            // Only the owner of the registry can delete the registry entry
+            // Ideally we should also allow the creator to delete it, 
+            // We will implement this in the next stage.
             if (!Runtime.CheckWitness(owner))
             {
                 Runtime.Log("failed to verify");
