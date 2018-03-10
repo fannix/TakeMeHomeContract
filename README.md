@@ -21,6 +21,42 @@ its addresses is 6478509f833cccbbc5a9f70e6d8183065b54b48f.
 We also deployed an example of reward contract at 011ce07245481a06042f039407f6b7737e443e47.
 To test our app, We created an corresponding entry for this contract in the registry contract:
 `70202E016B4FC400203AAE13CC40D7855A2A5EDF -> DD21460AC14E185BDA33BB36B6C37263E391BDA6`.
+
 The key is `hash(beaconID`) with beaconID as 
-id1: 00000000-0000-0000-0000-000000000000 id2: 0 id3: 0.  
+`id1: 00000000-0000-0000-0000-000000000000 id2: 0 id3: 0`.  
 And the value is `hash(beaconID + "0") XOR 011ce07245481a06042f039407f6b7737e443e47` (i.e. the reward contract address).
+
+We can verify these by calling the `get` function:
+
+```bash
+curl -X POST -i 'http://seed2.neo.org:20332' --data '
+{
+  "jsonrpc": "2.0",
+  "method": "invokefunction",
+  "params": ["6478509f833cccbbc5a9f70e6d8183065b54b48f", "get",
+
+             [{"type": "ByteArray", "value": "70202E016B4FC400203AAE13CC40D7855A2A5EDF"}]
+             ],
+  "id": 3
+}
+'
+```
+
+
+```bash
+{
+   "jsonrpc":"2.0",
+   "id":3,
+   "result":{
+      "script":"1470202e016b4fc400203aae13cc40d7855a2a5edf51c103676574678fb4545b0683816d0ef7a9c5bbcc3c839f507864",
+      "state":"HALT, BREAK",
+      "gas_consumed":"0.189",
+      "stack":[
+         {
+            "type":"ByteArray",
+            "value":"dd21460ac14e185bda33bb36b6c37263e391bda6"
+         }
+      ]
+   }
+}
+```
