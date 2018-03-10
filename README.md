@@ -41,7 +41,7 @@ curl -X POST -i 'http://seed2.neo.org:20332' --data '
 '
 ```
 
-The result should be.
+The result should be:
 
 ```bash
 {
@@ -76,7 +76,7 @@ We can also query information for the reward contract.
 }
 ```
 
-It will return an email address.
+It will return an email address:
 
 ```bash
 {
@@ -96,4 +96,6 @@ It will return an email address.
 }
 ```
 
+The email is encoded in a hex code format. We can read the address like this:
+0x64 is 'd', 0x6f is 'o'...
 After converting the ByteArray to ASCII, the address will be "doge@doge.com".
