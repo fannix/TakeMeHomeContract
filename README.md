@@ -19,14 +19,13 @@ We already deployed the registry contracts at testnet,
 its addresses is 6478509f833cccbbc5a9f70e6d8183065b54b48f.
 
 We also deployed an example of reward contract at 011ce07245481a06042f039407f6b7737e443e47.
-To test our app, We created an corresponding entry for this contract in the registry contract:
+To test our app, We created an corresponding key/value entry for this contract in the registry contract:
 `70202E016B4FC400203AAE13CC40D7855A2A5EDF -> DD21460AC14E185BDA33BB36B6C37263E391BDA6`.
 
-The key is `hash(beaconID`) with beaconID as 
-`id1: 00000000-0000-0000-0000-000000000000 id2: 0 id3: 0`.  
-And the value is `hash(beaconID + "0") XOR 011ce07245481a06042f039407f6b7737e443e47` (i.e. the reward contract address).
+The key is `RIPEMD160(beaconID)` (we use `id1: 00000000-0000-0000-0000-000000000000 id2: 0 id3: 0` as the example beacon ID).  
+And the value is `RIPEMD160(beaconID + "0") XOR SMART_CONTRACT_ADDR` (011ce07245481a06042f039407f6b7737e443e47 is the example reward contract address).
 
-We can verify these by calling the `get` function:
+We can query the value using the key by calling the `get` function:
 
 ```bash
 curl -X POST -i 'http://seed2.neo.org:20332' --data '
@@ -42,6 +41,7 @@ curl -X POST -i 'http://seed2.neo.org:20332' --data '
 '
 ```
 
+The result should be.
 
 ```bash
 {
@@ -60,3 +60,40 @@ curl -X POST -i 'http://seed2.neo.org:20332' --data '
    }
 }
 ```
+
+We can also query information for the reward contract.
+
+
+```bash
+{
+  "jsonrpc": "2.0",
+  "method": "invokefunction",
+  "params": ["011ce07245481a06042f039407f6b7737e443e47", "email",
+
+             []
+             ],
+  "id": 3
+}
+```
+
+It will return an email address.
+
+```bash
+{
+   "jsonrpc":"2.0",
+   "id":3,
+   "result":{
+      "script":"00c105656d61696c67473e447e73b7f60794032f04061a484572e01c01",
+      "state":"HALT, BREAK",
+      "gas_consumed":"0.111",
+      "stack":[
+         {
+            "type":"ByteArray",
+            "value":"646f676540646f67652e636f6d"
+         }
+      ]
+   }
+}
+```
+
+After converting the ByteArray to ASCII, the address will be "doge@doge.com".
